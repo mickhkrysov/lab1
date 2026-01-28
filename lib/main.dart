@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,20 +16,38 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const TimerPage(), //the timer itself
+      home: const MyHomePage(title: "Timer, Lab1"), //the timer itself
     );
   }
 }
 
+void main() {
+  Timer(const Duration(seconds: 5), handleTimeout);
+  runApp(const MyApp());
+}
+
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
  
   final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
+
+lass TimerPage extends StatefulWidget {
+  const TimerPage({super.key});
+
+  @override
+  State<TimerPage> createState() => _TimerPageState();
+}
+
+class _TimerPageState extends State<TimerPage> {
+  int _seconds = 0;
+  Timer? _timer;
+  bool _isRunning = false;
+
 
 class _MyHomePageState extends State<MyHomePage> {
 
