@@ -11,7 +11,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Timer Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Lab1 Timer',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 12, 185, 38)),
         useMaterial3: true,
@@ -20,15 +21,12 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Timer Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 100, 183, 62),
       ),
       home: const TimerPage(),
     );
@@ -46,6 +44,12 @@ class _TimerPageState extends State<TimerPage> {
   Timer? _timer;             //the timer
   bool _isRunning = false;   // if timer is running
 
+  //dispose
+  @override
+ void dispose() {
+   _timer?.cancel();
+   super.dispose();
+ }
   /// start
   void _startTimer() {
     if (_isRunning) return; 
@@ -61,33 +65,35 @@ class _TimerPageState extends State<TimerPage> {
     });
   }
 
-  
+  /// reset timer
+ void _resetTimer() {
+   _timer?.cancel();
+   setState(() {
+     _seconds = 0;
+     _isRunning = false;
+   });
+ }
 
   String _formatTime(int totalSeconds) {
-    final int minutes = totalSeconds ~/ 60;
     final int seconds = totalSeconds % 60;
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    return '${twoDigits(minutes)}:${twoDigits(seconds)}';
+    return seconds.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Timer App (Timer.periodic)'),
+        title: const Text('Timer App'),
+        backgroundColor: const Color.fromARGB(255, 219, 134, 220),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Elapsed Time',
-              style: TextStyle(fontSize: 24),
-            ),
             const SizedBox(height: 16),
             Text(
               _formatTime(_seconds),
-              style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 32),
             // buttons
@@ -98,6 +104,11 @@ class _TimerPageState extends State<TimerPage> {
                   onPressed: _isRunning ? null : _startTimer,
                   child: const Text('Start'),
                 ),
+                const SizedBox(width: 16),
+               ElevatedButton(
+                 onPressed: _resetTimer,
+                 child: const Text('Reset'),
+               ),
                 const SizedBox(width: 16),
               ],
             ),
